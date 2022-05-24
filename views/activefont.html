@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  
+
+    <div>hello 大明王朝 </div>
+    <div class="activeFont">hello 大明王朝</div>
+    <script>
+      const fontname = 'HYZhengYuan-75S';
+      const text = '大明王朝';
+      const style = document.createElement('style');
+      style.innerHTML = `
+      @font-face {
+        font-family: ${fontname};
+        src: url("http://localhost:3000/font-test?font=${fontname}&text=${encodeURIComponent(
+        text
+      )}");
+      }
+      .activeFont {
+        font-family: ${fontname};
+        font-display: block;
+      }
+      `;
+      //但是这里存在一个问题，由于请求接口需要一定的时间，文字会出现"先空白一段时间后显示"的现象。这种现象被称之为 FOIT (Flash Of Invisible Text)。我们需要寻找优化办法
+      // 优化方案：
+      //1. font-display: 在 CSS 层面上提供了此类问题的解决方法，他在大部分的浏览器中已经兼容：block：浏览器首先使用隐形文字替代页面上的文字，并等待字体加载完成再显示；
+  
+      //2. CSS Font Loading API： 在javascript层面，浏览器也提供了CSS Font Loading API来操作字体。它在大部浏览器中已经得到了支持。（注意虽然得到了较普遍的支持，还是试验性的，需要注意风险）
+      document.head.appendChild(style);
+  
+      
+    </script>
+  </body>
+  </html>

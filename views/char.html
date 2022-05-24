@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+          font-family: op-design;
+          src: url('../assest/fonts/HYZhengYuan-75S.ttf') format('truetype');
+        }
+     /* 繁体+简体+特殊字符 */
+        .text {
+          font-family: op-design;
+          font-size: 40rpx;
+        }
+      </style>
+</head>
+<body>
+    <div class="text">﹟ `!^…！~ #﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=<＿_-\ˇ﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】1234567890@￥():"[]|?/>,.;'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZπ一二三四五六七八九十ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ。，、﹑＇：∶‘’“”〝〞﹕︰﹔﹖·¨¸´？～—｜‖＂〃</div>
+
+    <script>
+        let str = document.querySelector(".text").innerText;
+        console.log(str.length)
+        let arr = str.split('');
+        arr = [...new Set(arr)]
+        console.log(arr)
+      </script>
+</body>
+</html>
