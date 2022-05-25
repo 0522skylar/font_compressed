@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        @font-face {
+        /* @font-face {
             font-family: op-design;
-            src: url('./fonts/HYZhengYuan-75S.ttf') format('truetype');
-        }
+            src: url('../assets/fonts/kati.ttf') format('truetype');
+        } */
 
         /* 繁体+简体+特殊字符 */
         .text {
@@ -59,7 +59,7 @@
     <hr />
     <form id="upload" enctype="multipart/form-data" method="post">
         <input type="file" name="file" id="pic" />
-        <input type="button" value="上传ttf" onclick="uploadPic()"></input>
+        <input type="button" value="上传ttf" onclick="uploadFile()"></input>
         <span class="showUrl"></span>
         <img src="" class="showPic" alt="">
     </form>
@@ -109,67 +109,75 @@
             </p>
         </div>
     </div>
-
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script>
-        let str = document.querySelector(".text").innerText;
-        console.log(str.length)
-        let arr = str.split('');
-        arr = [...new Set(arr)]
-        console.log(arr.length)
-        console.log(arr.join(''))
+        // 动态加载字体资源
+        function activeFontSource() {
+            const fontname = 'kati';
+            const style = document.createElement('style');
+            style.innerHTML = `
+            @font-face {
+                font-family: ${fontname};
+                src: url("http://localhost:3000/font-test?font=${fontname}");
+            }
+            .text {
+                font-family: ${fontname};
+                font-display: block;
+            }
+            `;
+            document.head.appendChild(style);
+        }
+        activeFontSource()
 
+        // 上传名字
         let uploadName = '';
 
-
+        // 下载ttf
         document.querySelector(".btn").onclick = () => {
             console.log(111111111)
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
-            a.href = 'http://localhost:3000/font-test?font=HYZhengYuan-75S'; // 将图片的src赋值给a节点的href
+            a.href = 'http://localhost:3000/font-test?font=kati'; // 将图片的src赋值给a节点的href
             let event = new MouseEvent('click') // 模拟鼠标click点击事件
             a.dispatchEvent(event); // 触发鼠标点击事件
         }
 
+        // 下载woff2
         document.querySelector('.change').onclick = () => {
             console.log(2222222222)
             if(uploadName.length != 0) {
-               $.ajax({
-                    url: "http://localhost:3000/ttf-to-woff?name="+uploadName,
-                    type: "get",
-                    success: function (res) {
-                        console.log(res);
-                        alert(res.msg)
-                        let a = document.createElement('a'); // 创建一个a节点插入的document
-                        a.download = res.url;
-                        a.href = 'http://localhost:3000/woff/' +  res.url; // 将图片的src赋值给a节点的href
-                        let event = new MouseEvent('click') // 模拟鼠标click点击事件
-                        a.dispatchEvent(event); // 触发鼠标点击事件
-                    },
-                    error: function (err) {
-                        alert("网络连接失败,稍后重试", err);
-                    }
-               })
+                axios({
+                    method: 'get',
+                    url:"http://localhost:3000/ttf-to-woff?name="+uploadName,
+                }).then((res) => {
+                    console.log(res.data);
+                    alert(res.data.msg)
+                    let a = document.createElement('a'); // 创建一个a节点插入的document
+                    a.download = res.data.url;
+                    a.href = 'http://localhost:3000/woff/' +  res.data.url; // 将图片的src赋值给a节点的href
+                    let event = new MouseEvent('click') // 模拟鼠标click点击事件
+                    a.dispatchEvent(event); // 触发鼠标点击事件
+                }).catch((err) => {
+                    alert("网络连接失败,稍后重试", err);
+                })
             }
         }
-        // const fontname = 'HYZhengYuan-75S';
-        //   const style = document.createElement('style');
-        //   style.innerHTML = `
-        //   @font-face {
-        //     font-family: ${fontname};
-        //     src: url("http://localhost:3000/font-test?font=${fontname}");
-        //   }
-        //   .text {
-        //     font-family: ${fontname};
-        //     font-display: block;
-        //   }
-        //   `;
-        //   document.head.appendChild(style);
+        
 
-
-        function uploadPic() {
+        // 上传ttf文件
+        function uploadFile() {
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
+            axios.post('http://localhost:3000/upload',formData,{
+                'Content-type' : 'multipart/form-data'
+            }).then(res=>{
+                console.log(res.data);
+                uploadName = res.data.fileName;
+            },err=>{
+                alert("网络连接失败,稍后重试", err);
+            })  
+            /*
             $.ajax({
                 url: "http://localhost:3000/upload",
                 type: "post",
@@ -183,8 +191,8 @@
                 error: function (err) {
                     alert("网络连接失败,稍后重试", err);
                 }
-
             })
+            */
         }
     </script>
 </body>

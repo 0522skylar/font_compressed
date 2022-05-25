@@ -144,7 +144,7 @@ app.use('/public', express.static(path.join(__dirname, './static')));
 // 根据当前文件目录指定文件夹
 const dir = path.resolve(__dirname, './public/upload');
 // 图片大小限制KB
-const SIZELIMIT = 500000;
+const SIZELIMIT = 5000000;//1923148
 
 const storage = multer.diskStorage({
   // 指定文件路径
@@ -181,7 +181,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   } = req.file;
   const types = ['ttf'];
   const tmpTypes = originalname.split('.')[1];
-
+  console.log('fileInfo', size, originalname, filename)
   // 检查文件大小
   if (size >= SIZELIMIT) {
     return res.send({
