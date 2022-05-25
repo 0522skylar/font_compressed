@@ -168,7 +168,7 @@
 
 
         function uploadPic() {
-            var form = document.getElementById('upload'),
+            let form = document.getElementById('upload'),
                 formData = new FormData(form);
             $.ajax({
                 url: "http://localhost:3000/upload",
