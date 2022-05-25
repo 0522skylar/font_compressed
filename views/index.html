@@ -9,7 +9,7 @@
     <style>
         @font-face {
             font-family: op-design;
-            src: url('./fonts/font-test.ttf') format('truetype');
+            src: url('./fonts/瑞美加张清平硬笔楷书.ttf') format('truetype');
         }
 
         /* 繁体+简体+特殊字符 */
@@ -126,7 +126,7 @@
             console.log(111111111)
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
-            a.href = 'http://localhost:3000/font-test?font=HYZhengYuan-75S'; // 将图片的src赋值给a节点的href
+            a.href = 'http://localhost:3000/font-test?font=瑞美加张清平硬笔楷书'; // 将图片的src赋值给a节点的href
             let event = new MouseEvent('click') // 模拟鼠标click点击事件
             a.dispatchEvent(event); // 触发鼠标点击事件
         }
@@ -152,7 +152,7 @@
                })
             }
         }
-        // const fontname = 'HYZhengYuan-75S';
+        // const fontname = '瑞美加张清平硬笔楷书';
         //   const style = document.createElement('style');
         //   style.innerHTML = `
         //   @font-face {
@@ -168,7 +168,7 @@
 
 
         function uploadPic() {
-            var form = document.getElementById('upload'),
+            let form = document.getElementById('upload'),
                 formData = new FormData(form);
             $.ajax({
                 url: "http://localhost:3000/upload",
