@@ -6,49 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        /* @font-face {
-            font-family: op-design;
-            src: url('../assets/fonts/kati.ttf') format('truetype');
-        } */
-
-        /* 繁体+简体+特殊字符 */
-        .text {
-            font-family: op-design;
-            font-size: 16px;
-            line-height: 30px;
-        }
-
-        .usually {
-            font-size: 16px;
-            line-height: 30px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        h3 {
-            text-align: center;
-        }
-
-        .box {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .left {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-right: 50px;
-        }
-
-        .right {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
@@ -60,8 +18,6 @@
     <form id="upload" enctype="multipart/form-data" method="post">
         <input type="file" name="file" id="pic" />
         <input type="button" value="上传ttf" onclick="uploadFile()"></input>
-        <span class="showUrl"></span>
-        <img src="" class="showPic" alt="">
     </form>
 
     <hr />
@@ -109,12 +65,11 @@
             </p>
         </div>
     </div>
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script>
         // 动态加载字体资源
         function activeFontSource() {
-            const fontname = 'kati';
+            const fontname = 'heiti';
             const style = document.createElement('style');
             style.innerHTML = `
             @font-face {
@@ -135,7 +90,6 @@
 
         // 下载ttf
         document.querySelector(".btn").onclick = () => {
-            console.log(111111111)
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
             a.href = 'http://localhost:3000/font-test?font=kati'; // 将图片的src赋值给a节点的href
@@ -145,7 +99,6 @@
 
         // 下载woff2
         document.querySelector('.change').onclick = () => {
-            console.log(2222222222)
             if(uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -177,22 +130,6 @@
             },err=>{
                 alert("网络连接失败,稍后重试", err);
             })  
-            /*
-            $.ajax({
-                url: "http://localhost:3000/upload",
-                type: "post",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (res) {
-                    console.log(res);
-                    uploadName = res.fileName;
-                },
-                error: function (err) {
-                    alert("网络连接失败,稍后重试", err);
-                }
-            })
-            */
         }
     </script>
 </body>

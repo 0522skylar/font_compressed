@@ -67,7 +67,6 @@ app.get('/', (req, res) => {
   res.render('./index.html');
 })
 
-
 app.get('/list', function (req, res) {
   res.send({
     list: listdata,
@@ -86,7 +85,7 @@ app.get('/active', function (req, res) {
 app.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输出包含该文字的字体包
   // 字体源文件
   let font = req.query.font;
-  console.log(font)
+  console.log(font,' 字体包名称')
   var srcPath = path.join(__dirname, './assets/fonts/' + font + '.ttf');
   var text = data.text;
 
@@ -102,14 +101,22 @@ app.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输
       text: text // 所需文字
     })
   );
-
+  if(font.length === 0) {
+    res.send({
+      code: 0,
+      msg: '没有传输字体包名称'
+    })
+    return
+  }
   fontmin.run(function (err, files, stream) {
     if (err) {
       // 异常捕捉
       console.error(err);
     }
-    console.log('解析完毕， 保存到路由中，没有保存到本地')
-    res.send(files[0].contents);
+    else {
+      console.log( '解析完毕， 保存到路由中，没有保存到本地')
+      res.send(files[0].contents);
+    }
   });
 })
 //---------------------------------ttf-->woff2-------------------
@@ -220,5 +227,5 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-  console.log(`localhost:${port}`)
+  console.log(`http://localhost:${port}/`)
 })
