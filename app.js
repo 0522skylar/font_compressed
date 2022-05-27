@@ -224,6 +224,33 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   // })
 });
 
+// 传送文字给页面
+app.post('/send-word', (req, res) => {
+  let word = require('./data/test.json')
+  console.log('传送成功！')
+  res.send({
+    code: 200,
+    ...word
+  })
+})
+// 把页面中添加的文字写入文件中
+app.post('/write-word', (req, res) => {
+
+  let word = req.body.addtext
+  let jsonObj = {
+    text: word
+  }
+  console.log('开始写入--------')
+  fs.writeFile('./data/test.json', JSON.stringify(jsonObj), (err) => {
+    console.log(err)
+    console.log('写入成功！')
+    res.send({
+      code: 200,
+      msg: '写入成功'
+    })
+  })
+  
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
