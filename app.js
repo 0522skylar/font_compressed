@@ -6,13 +6,14 @@ const path = require('path');
 const bodyPaser = require('body-parser');
 const Fontmin = require('fontmin');
 
-const data = require('./data/fan.json');
+const data = require('./data/test.json');
 const fs = require('fs');
 const ttf2woff2 = require('ttf2woff2');
 const multer = require('multer')        //导入multer中间件
 const app = express()
 const port = 3000
 
+let specialWord = '';
 
 //开放静态资源文件
 app.use(express.static(path.join(__dirname, 'public')));
@@ -60,6 +61,7 @@ app.all("*", function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header("Cache-Control", "no-store"); //禁用缓存
   next();
 })
 app.get('/', (req, res) => {
@@ -87,8 +89,7 @@ app.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输
   let font = req.query.font;
   console.log(font,' 字体包名称')
   var srcPath = path.join(__dirname, './assets/fonts/' + font + '.ttf');
-  var text = data.text;
-
+  var text = data.text + specialWord;
 
   // 文字去重
   var textArr = Array.from(new Set(text.split('')));
@@ -226,8 +227,11 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
 // 传送文字给页面
 app.post('/send-word', (req, res) => {
+  specialWord = req.body.text;
   let word = require('./data/test.json')
   console.log('传送成功！')
+
+  
   res.send({
     code: 200,
     ...word

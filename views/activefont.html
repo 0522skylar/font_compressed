@@ -12,21 +12,37 @@
 <body>
     <h1>测试压缩字体包</h1>
     <p>现在引用的字体包是/assets/fonts文件夹中的<span id="fontName"></span></p>
-    <button class="btn">下载ttf</button>
+    <div class="setup">
+        <p>请按如下步骤执行：</p>
+        <p>1.下载页面上所有字的字体资源</p>
+        <button class="btn">下载ttf</button>
 
-    <hr />
-    <form id="upload" enctype="multipart/form-data" method="post">
-        <input type="file" name="file" id="filettf" />
-        <button onclick="uploadFile()">上传ttf</button>
-    </form>
+        <p class="bottomdash"></p>
+        <p>2.上传第一步下载的ttf文件</p>
 
-    <hr />
-    <button class="change">转换woff2</button>
-    <hr />
-    <textarea class="writeBox" id="write"></textarea>
-    <button class="change" onclick="addWord()">提交</button>
+        <form id="upload" enctype="multipart/form-data" method="post">
+            <div class="fileUpload">
+                选择文件
+                <input type="file" name="file" id="filettf" />
+            </div>
+            <input type="button" name="submit" value="上传ttf" onclick="uploadFile()" class="submit">
+            <!-- form表单提交数据不让跳转办法,button标签会自动跳转 -->
+        </form>
 
-    <hr />
+        <p class="bottomdash"></p>
+        <p>3.下载woff2格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半）</p>
+        <button class="change">转换woff2</button>
+        <p class="bottomdash"></p>
+        <p>4.如果页面上的字体资源不足，欢迎补充提交，然后你会在文字后面看到新增的文字，但是没有字体样式，请重新刷新页面，字体资源重新加载，就能下载最新的ttf文件和woff2文件了</p>
+        <textarea class="writeBox" id="write"></textarea>
+        <button class="change" onclick="addWord()">提交</button>
+    </div>
+
+    <h3>特殊字符</h3>
+    <div id="special">﹟ `!^…！~ #﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=
+        <＿_-\ˇ﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】1234567890@￥():"[]|? />
+        ,.;'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZπ一二三四五六七八九十ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ。，、﹑＇：∶‘’“”〝〞﹕︰﹔﹖·¨¸´？～—｜‖＂〃
+    </div>
     <div class="box">
         <div class="left">
             <p class="text" id="textFont">
@@ -44,9 +60,10 @@
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.24.0/axios.min.js"></script>
     <script>
+        let fontname = 'heiti';
         // 动态加载字体资源
         function activeFontSource() {
-            const fontname = 'HYZhengYuan-75S';
+
             document.getElementById('fontName').innerText = fontname;
             const style = document.createElement('style');
             style.innerHTML = `
@@ -66,9 +83,13 @@
 
         // 获取页面文字
         function getWord() {
+            const str = document.querySelector('#special').innerText;
             axios({
                 method: 'post',
                 url: "http://localhost:3000/send-word",
+                data: {
+                    text: str
+                }
             }).then((res) => {
                 document.getElementById('textFont').innerText = res.data.text
                 document.getElementById('textUsually').innerText = res.data.text
@@ -113,14 +134,14 @@
             console.log(111111111)
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
-            a.href = 'http://localhost:3000/font-test?font=kati'; // 将图片的src赋值给a节点的href
+            a.href = 'http://localhost:3000/font-test?font=' + fontname; // 将图片的src赋值给a节点的href
             let event = new MouseEvent('click') // 模拟鼠标click点击事件
             a.dispatchEvent(event); // 触发鼠标点击事件
         }
 
         // 下载woff2
         document.querySelector('.change').onclick = () => {
-            console.log(2222222222)
+            console.log('upload', uploadName)
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -142,6 +163,7 @@
 
         // 上传ttf文件
         function uploadFile() {
+            console.log('uploadFile--ttf')
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
             axios.post('http://localhost:3000/upload', formData, {

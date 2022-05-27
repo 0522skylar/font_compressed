@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./css/index.css">
+    <!-- <link rel="stylesheet" href="./css/index.css">在线 -->
+    <link rel="stylesheet" href="../public/css/index.css">
 </head>
 
 <body>
@@ -69,7 +70,7 @@
     <script>
         // 动态加载字体资源
         function activeFontSource() {
-            const fontname = 'heiti';
+            const fontname = 'HYZhengYuan-75S';
             const style = document.createElement('style');
             style.innerHTML = `
             @font-face {
@@ -83,7 +84,7 @@
             `;
             document.head.appendChild(style);
         }
-        activeFontSource()
+        // activeFontSource()
 
         // 上传名字
         let uploadName = '';
