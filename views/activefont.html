@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ZH_cn">
 
 <head>
     <meta charset="UTF-8">
@@ -10,8 +10,8 @@
 </head>
 
 <body>
-    <h1>测试压缩字体包</h1>
-    <p>现在引用的字体包是/assets/fonts文件夹中的<span id="fontName"></span></p>
+    <h1>压缩字体包测试</h1>
+    <p style="text-align: center;">现在引用的字体包是/assets/fonts文件夹中的<span id="fontName"></span></p>
     <div class="setup">
         <p>请按如下步骤执行：</p>
         <p>1.下载页面上所有字的字体资源</p>
@@ -21,9 +21,9 @@
         <p>2.上传第一步下载的ttf文件</p>
 
         <form id="upload" enctype="multipart/form-data" method="post">
-            <div class="fileUpload">
+            <input type="file" name="file" id="filettf" oninput="showFile()"/>
+            <div class="fileUpload" onclick="document.getElementById('filettf').click()">
                 选择文件
-                <input type="file" name="file" id="filettf" />
             </div>
             <input type="button" name="submit" value="上传ttf" onclick="uploadFile()" class="submit">
             <!-- form表单提交数据不让跳转办法,button标签会自动跳转 -->
@@ -38,18 +38,19 @@
         <button class="change" onclick="addWord()">提交</button>
     </div>
 
-    <h3>特殊字符</h3>
-    <div id="special">﹟ `!^…！~ #﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=
+    <div id="special" style="display: none;">﹟ `!^…！~ #﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=
         <＿_-\ˇ﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】1234567890@￥():"[]|? />
         ,.;'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZπ一二三四五六七八九十ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ。，、﹑＇：∶‘’“”〝〞﹕︰﹔﹖·¨¸´？～—｜‖＂〃
     </div>
     <div class="box">
         <div class="left">
+            <h3>有字体效果</h3>
             <p class="text" id="textFont">
 
             </p>
         </div>
         <div class="right">
+            <h3>无字体效果</h3>
             <p class="usually" id="textUsually">
 
             </p>
@@ -58,8 +59,10 @@
 
 
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script src="./js/axios.min.js"></script>
     <script>
+
+        // 注意：使用input type=file时，用元素包裹input，更改input默认样式时，会导致上传时获取不到input选中的文件，导致上传失败，所以更改input样式时，用同级元素替代input，点击同级元素时，触发input的点击事件
         let fontname = 'heiti';
         // 动态加载字体资源
         function activeFontSource() {
@@ -69,7 +72,7 @@
             style.innerHTML = `
             @font-face {
                 font-family: ${fontname};
-                src: url("http://localhost:3000/font-test?font=${fontname}");
+                src: url("http://localhost:3000/admin/font-test?font=${fontname}");
             }
             .text {
                 font-family: ${fontname};
@@ -79,14 +82,26 @@
             document.head.appendChild(style);
         }
 
-
-
+        // 显示选择后的文件
+        function showFile() {
+            let dom = document.querySelector("#filettf");
+            let showDom = document.querySelector(".fileUpload");
+            let val = dom.value;
+            if(val.length != 0) {
+                showDom.innerText = '已选择'
+                showDom.style.background = '#e8f3ff'
+            }
+            else {
+                showDom.innerText = '选择文件'
+                showDom.style.background = '#c2e7b0'
+            }
+        }
         // 获取页面文字
         function getWord() {
             const str = document.querySelector('#special').innerText;
             axios({
                 method: 'post',
-                url: "http://localhost:3000/send-word",
+                url: "http://localhost:3000/admin/send-word",
                 data: {
                     text: str
                 }
@@ -114,7 +129,7 @@
             console.log('addtext')
             axios({
                 method: 'post',
-                url: "http://localhost:3000/write-word",
+                url: "http://localhost:3000/admin/write-word",
                 data: {
                     addtext: textArr.join('')
                 }
@@ -134,7 +149,7 @@
             console.log(111111111)
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
-            a.href = 'http://localhost:3000/font-test?font=' + fontname; // 将图片的src赋值给a节点的href
+            a.href = 'http://localhost:3000/admin/font-test?font=' + fontname; // 将图片的src赋值给a节点的href
             let event = new MouseEvent('click') // 模拟鼠标click点击事件
             a.dispatchEvent(event); // 触发鼠标点击事件
         }
@@ -145,7 +160,7 @@
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/ttf-to-woff?name=" + uploadName,
+                    url: "http://localhost:3000/admin/ttf-to-woff?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
@@ -163,20 +178,22 @@
 
         // 上传ttf文件
         function uploadFile() {
-            console.log('uploadFile--ttf')
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
-            axios.post('http://localhost:3000/upload', formData, {
+            console.log('uploadFile--ttf', document.querySelector("#filettf"))
+
+            axios.post('http://localhost:3000/admin/upload', formData, {
                 'Content-type': 'multipart/form-data'
             }).then(res => {
                 console.log(res.data);
                 uploadName = res.data.fileName;
+                alert(res.data.msg)
             }, err => {
                 alert("网络连接失败,稍后重试", err);
             })
             /*
             $.ajax({
-                url: "http://localhost:3000/upload",
+                url: "http://localhost:3000/admin/upload",
                 type: "post",
                 data: formData,
                 processData: false,

@@ -34,7 +34,7 @@ h3 {
 .left {
   padding: 10px;
   margin-right: 50px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, 0.37);
 }
 
 .right {
@@ -42,6 +42,9 @@ h3 {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
+.instructions {
+  text-align: center;
+}
 .bottomdash {
   border-bottom: 1px solid #c2e7b0;
   padding: 10px;
@@ -131,6 +134,9 @@ button:hover {
   bottom: 0;
   opacity: 0;
   cursor: pointer;
+}
+#filettf {
+  display: none;
 }
 .fileUpload:hover {
   background-color: #67c23a;
