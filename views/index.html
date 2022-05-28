@@ -155,6 +155,7 @@
         // 下载woff2
         document.querySelector('.change').onclick = () => {
             console.log('upload', uploadName)
+            uploadName = uploadName.length === 0 ? fontname :uploadName;
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
