@@ -56,7 +56,7 @@ app.get('/active', function (req, res) {
 
 app.get('/list', function (req, res) {
   res.send({
-    list: listdata,
+    list: 'hello',
     code: 200
   })
 })

@@ -73,7 +73,7 @@
             style.innerHTML = `
             @font-face {
                 font-family: ${fontname};
-                src: url("http://localhost:3000/home/font-test?font=${fontname}");
+                src: url("http://120.55.191.178:3000/home/font-test?font=${fontname}");
             }
             .text {
                 font-family: ${fontname};
@@ -103,7 +103,7 @@
         function getWord() {
             axios({
                 method: 'post',
-                url: "http://localhost:3000/home/send-word",
+                url: "http://120.55.191.178:3000/home/send-word",
             }).then((res) => {
                 document.getElementById('textFont').innerText = res.data.text
                 document.getElementById('textUsually').innerText = res.data.text
@@ -128,7 +128,7 @@
             console.log('addtext')
             axios({
                 method: 'post',
-                url: "http://localhost:3000/home/write-word",
+                url: "http://120.55.191.178:3000/home/write-word",
                 data: {
                     addtext: textArr.join('')
                 }
@@ -147,7 +147,7 @@
         document.querySelector(".btn").onclick = () => {
             let a = document.createElement('a'); // 创建一个a节点插入的document
             a.download = 'file.ttf';
-            a.href = 'http://localhost:3000/home/font-test?font=' + fontname; // 将图片的src赋值给a节点的href
+            a.href = 'http://120.55.191.178:3000/home/font-test?font=' + fontname; // 将图片的src赋值给a节点的href
             let event = new MouseEvent('click') // 模拟鼠标click点击事件
             a.dispatchEvent(event); // 触发鼠标点击事件
         }
@@ -159,13 +159,13 @@
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/home/ttf-to-woff?name=" + uploadName,
+                    url: "http://120.55.191.178:3000/home/ttf-to-woff?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
                     let a = document.createElement('a'); // 创建一个a节点插入的document
                     a.download = res.data.url;
-                    a.href = 'http://localhost:3000/woff/' + res.data.url; // 将图片的src赋值给a节点的href
+                    a.href = 'http://120.55.191.178:3000/woff/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
                 }).catch((err) => {
@@ -180,7 +180,7 @@
             console.log('uploadFile--ttf')
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
-            axios.post('http://localhost:3000/home/upload', formData, {
+            axios.post('http://120.55.191.178:3000/home/upload', formData, {
                 'Content-type': 'multipart/form-data'
             }).then(res => {
                 console.log(res.data);

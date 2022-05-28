@@ -26,7 +26,7 @@ const upload = multer({
     storage: storage
 });
 // 引入常用文字
-const data = require('../data/fan.json');
+
 home.all("*", function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
@@ -40,12 +40,14 @@ home.all("*", function (req, res, next) {
 
 //--------------------------------动态解析字体------------------
 
-
+const data = require('../data/fan.json');
 home.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输出包含该文字的字体包
     // 字体源文件
     let font = req.query.font;
     console.log(font, ' 字体包名称')
     var srcPath = path.join(__dirname, '../assets/fonts/' + font + '.ttf');
+    delete require.cache[require.resolve('../data/test.json')];
+    const data = require('../data/fan.json');
     var text = data.text;
 
     // 文字去重
@@ -147,23 +149,36 @@ home.post('/upload', upload.single('file'), async (req, res) => {
 
 // 传送文字给页面
 home.post('/send-word', (req, res) => {
-    console.log('传送成功！')
-    res.send({
-        code: 200,
-        ...data
+    fs.readFile(path.join(__dirname, '../data/fan.json'),'utf-8', function(err, data) {
+        if(err) {
+            console.log(err, 'reading---')
+            res.send({
+                code: -1,
+                data: '未成功读取到数据'
+            })
+        }
+        else {
+            let str =  data.toString();
+            let obj = JSON.parse(str);
+            console.log('传送文字成功！')
+            res.send({
+                code: 200,
+                ...obj
+            })
+        }
     })
 })
 // 把页面中添加的文字写入文件中
 home.post('/write-word', (req, res) => {
-    let word = req.body.addtext
-    let strWord = data.text + word;
-    let arr = [...new Set(strWord.split(' '))]
+    let word = req.body.addtext;
     let jsonObj = {
-        text: arr.join('')
+        text: word
     }
     console.log('开始写入--------')
     fs.writeFile(path.join(__dirname, '../data/fan.json'), JSON.stringify(jsonObj), (err) => {
-        console.log('写入成功！', err)
+        // fs.writeFile('../data/test.json', JSON.stringify(jsonObj), (err) => {
+        console.log(err)
+        console.log('写入成功！')
         res.send({
             code: 200,
             msg: '写入成功'
@@ -171,6 +186,5 @@ home.post('/write-word', (req, res) => {
     })
 
 })
-
 
 module.exports = home;

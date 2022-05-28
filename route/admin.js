@@ -31,9 +31,8 @@ const upload = multer({
     storage: storage
 });
 
-const data = require('../data/test.json');
 
-let specialWord = '';
+
 
 admin.all("*", function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -48,13 +47,16 @@ admin.all("*", function (req, res, next) {
 
 //--------------------------------动态解析字体------------------
 
-
+const data = require('../data/test.json');
 admin.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输出包含该文字的字体包
+    delete require.cache[require.resolve('../data/test.json')];
+    const data = require('../data/test.json');
+    
     // 字体源文件
     let font = req.query.font;
     console.log(font, ' 字体包名称')
     var srcPath = path.join(__dirname, '../assets/fonts/' + font + '.ttf');
-    var text = data.text + specialWord;
+    var text = data.text;
 
     // 文字去重
     var textArr = Array.from(new Set(text.split('')));
@@ -168,19 +170,31 @@ admin.post('/upload', upload.single('file'), async (req, res) => {
 
 // 传送文字给页面
 admin.post('/send-word', (req, res) => {
-    specialWord = req.body.text;
-    console.log('传送成功！')
-
-
-    res.send({
-        code: 200,
-        ...data
+    // const data = fs.readFileSync(path.join(__dirname, '../data/test.json'))
+    // const data = require("../data/test.json")
+    fs.readFile(path.join(__dirname, '../data/test.json'),'utf-8', function(err, data) {
+        if(err) {
+            console.log(err, 'reading---')
+            res.send({
+                code: -1,
+                data: '未成功读取到数据'
+            })
+        }
+        else {
+            let str =  data.toString();
+            let obj = JSON.parse(str);
+            console.log('传送文字成功！')
+            res.send({
+                code: 200,
+                ...obj
+            })
+        }
     })
+    
 })
 // 把页面中添加的文字写入文件中
 admin.post('/write-word', (req, res) => {
-
-    let word = req.body.addtext + specialWord
+    let word = req.body.addtext;
     let jsonObj = {
         text: word
     }
