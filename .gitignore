@@ -2,6 +2,12 @@
 
 # dependencies
 /node_modules
+/assets/fonts/HYZhengYuan-55S.ttf
+/assets/fonts/HYZhengYuan-75S.ttf
+/public/fonts/HYZhengYuan-55S.ttf
+/public/fonts/HYZhengYuan-75S.ttf
+/public/fonts/HYZhengYuan-55S.woff2
+/public/fonts/HYZhengYuan-75S.woff2
 /.pnp
 .pnp.js
 
