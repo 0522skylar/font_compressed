@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="referrer" content="origin"> -->
+    <meta name="referrer" content="no-referrer"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./css/index.css">
@@ -11,6 +13,7 @@
 
 <body>
     <h1>压缩字体包测试</h1>
+    <button class="testRoute">测试接口</button>
     <p style="text-align: center;">现在引用的字体包是/assets/fonts文件夹中的<span id="fontName"></span></p>
     <div class="setup">
         <p>请按如下步骤执行：</p>
@@ -62,6 +65,14 @@
     <script src="./js/axios.min.js"></script>
     <script>
 
+        document.querySelector(".testRoute").onclick = () => {
+            axios.get('http://localhost:80/home/test').then(res => {
+                console.log(res.data);
+               
+            }, err => {
+                alert("网络连接失败,稍后重试", err);
+            })
+        }
         // 注意：使用input type=file时，用元素包裹input，更改input默认样式时，会导致上传时获取不到input选中的文件，导致上传失败，所以更改input样式时，用同级元素替代input，点击同级元素时，触发input的点击事件
         let fontname = 'heiti';
         // 动态加载字体资源
