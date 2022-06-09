@@ -69,7 +69,6 @@ module.exports = function(opts) {
 
         if(file.isStream()) {
             cb(new Error('Streaming is not supported'));
-
             return;
         }
 
