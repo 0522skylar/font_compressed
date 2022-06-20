@@ -43,7 +43,8 @@
         </form>
 
         <p class="bottomdash"></p>
-        <p>3.下载不同格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半）</p>
+        <p>3.下载不同格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半，）</p>
+        <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快</p>
         <button class="change conver">ttf转换woff2</button>
         <button class="change conver">ttf转换woff</button>
         <button class="change conver">ttf转换eot</button>
@@ -83,6 +84,7 @@
         // 注意：使用input type=file时，用元素包裹input，更改input默认样式时，会导致上传时获取不到input选中的文件，导致上传失败，所以更改input样式时，用同级元素替代input，点击同级元素时，触发input的点击事件
         let fontname = 'heiti'; //HYZhengYuan-75S
         let fileType = 'ttf'; // woff2
+        
         // 动态加载字体资源, 页面首次加载字体资源创建元素
         function activeFontSource(ttype) {
             document.getElementById('fontName').innerText = fontname;
@@ -101,6 +103,7 @@
             console.log(`http://localhost:3000/admin/font-test?font=${fontname}&type=${type}`, '---------active-------')
             document.head.appendChild(style);
         }
+        
         // 页面加载字体资源更换内容
         function getChangeRes(ttype) {
             document.getElementById('fontName').innerText = fontname;
@@ -117,6 +120,7 @@
             }
             `;
         }
+        
         // 显示选择后的文件
         function showFile() {
             let dom = document.querySelector("#filettf");
@@ -131,6 +135,7 @@
                 showDom.style.background = '#c2e7b0'
             }
         }
+        
         // 显示选择后的文件1
         function showFile_one() {
             let dom = document.querySelector("#initfile");
@@ -207,6 +212,7 @@
 
         // 下载woff2
         let changeArr = document.querySelectorAll('.conver');
+        
         changeArr[0].onclick = () => {
             console.log('upload', uploadName)
             if (uploadName.length != 0) {
@@ -226,6 +232,7 @@
                 })
             }
         }
+        
         // ttf-to-woff
         changeArr[1].onclick = () => {
             console.log('upload', uploadName)
@@ -268,6 +275,7 @@
             }
         }
         //otf-to-ttf
+        
         changeArr[3].onclick = () => {
             console.log('upload', uploadName)
             if (uploadName.length != 0) {
@@ -287,6 +295,8 @@
                 })
             }
         }
+        
+        // 测试接口
         document.getElementById('test').onclick = () => {
             console.log('upload', fontname)
             if (fontname.length != 0) {
@@ -306,6 +316,7 @@
                 })
             }
         }
+        
         // 上传需要加载的文件
         function initFont() {
             let form = document.getElementById('uploadInitFont'),
@@ -361,6 +372,18 @@
                 }
             })
             */
+        }
+    
+        //
+        window.onbeforeunload = () => {
+            axios({
+                    method: 'get',
+                    url: "http://localhost:3000/admin/removeFile",
+                }).then((res) => {
+                    console.log(11111111, res)
+                }).catch((err) => {
+                    alert("网络连接失败,稍后重试", err);
+                })
         }
     </script>
 </body>

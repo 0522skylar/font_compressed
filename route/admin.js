@@ -5,12 +5,13 @@ const Fontmin = require('fontmin');
 const fs = require('fs');
 const ttf2woff2 = require('ttf2woff2');
 const multer = require('multer') //导入multer中间件
+const removeFile = require('../util/removeFile')
 
 
 // 根据当前文件目录指定文件夹
 const dir = path.resolve(__dirname, '../public/upload');
 //大小限制KB
-const SIZELIMIT = 50000000; //1923148  18412920 
+const SIZELIMIT = 50000000; //1923148  18412920  8125644
 
 const storage = multer.diskStorage({
     // 指定文件路径
@@ -101,7 +102,6 @@ admin.get('/font-test', (req, res) => { // 根据传递过来的文字，打印�
 })
 //---------------------------------ttf-->woff2-------------------
 admin.get('/ttf-to-woff', (req, res) => {
-    console.log(req.query.name)
     let fileName = req.query.name;
     if (fileName === undefined) {
         res.send({
@@ -109,13 +109,17 @@ admin.get('/ttf-to-woff', (req, res) => {
             msg: '系统中没有该文件名'
         })
     }
+    console.log(fileName, '---woff2--------')
+
+    removeFile('woff2', fileName)
+
     // 同步读取文件
     // var input = fs.readFileSync('../public/upload' + fileName);
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
     // ttf格式转换成woff2格式
     fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
-        console.log('write  ing-------finish---------------')
+        console.log('writeing-------finish---------------', err)
         res.send({
             code: 200,
             msg: '转换成功',
@@ -134,6 +138,9 @@ admin.get('/ttf-to-woffone', (req, res) => {
             msg: '系统中没有该文件名'
         })
     }
+    // 删除上次文件夹中上传的文件
+    removeFile('woff', fileName)
+
     // 同步读取文件
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
@@ -168,6 +175,8 @@ admin.get('/ttf-to-eot', (req, res) => {
             msg: '系统中没有该文件名'
         })
     }
+    // 删除上次文件夹中上传的文件
+    removeFile('eot', fileName)
     // 同步读取文件
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
@@ -200,6 +209,8 @@ admin.get('/otf-to-ttf', (req, res) => {
             msg: '系统中没有该文件名'
         })
     }
+    // 删除上次文件夹中上传的文件
+    removeFile('ttf', fileName)
     // 同步读取文件
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
@@ -225,6 +236,7 @@ admin.get('/otf-to-ttf', (req, res) => {
 //--------------------------------upload------------------------------------
 
 admin.post('/upload', upload.single('file'), async (req, res) => {
+
     // 即将上传图片的key值 form-data对象{key: value}
     // 检查是否有文件待上传
     if (req.file === undefined) {
@@ -238,6 +250,9 @@ admin.post('/upload', upload.single('file'), async (req, res) => {
         originalname,
         filename
     } = req.file;
+    // 保存文件时，先删除上次长传的文件
+    removeFile('upload', filename)
+
     const types = ['ttf', 'otf'];
     const tmpTypes = originalname.split('.')[1];
     console.log('fileInfo', size, originalname, filename)
@@ -354,5 +369,10 @@ admin.post('/write-word', (req, res) => {
 
 })
 
+
+admin.get('/removeFile', (req, res) => {
+    console.log(1111111)
+    
+})
 
 module.exports = admin;
