@@ -5,7 +5,7 @@
 
 #### 软件架构
 软件架构说明
-1. 使用fontmin提取字体资源(https://github.com/ecomfe/fontmin)
+1. 使用fontmin提取字体资源
 2. 服务由express搭建
 3. 使用ttf2woff2把字体ttf格式转换为woff2格式
 

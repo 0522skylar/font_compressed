@@ -1,7 +1,7 @@
-/* 
-@font-face {
+
+/* @font-face {
     font-family: op-design;
-    src: url('../fonts/heiti.woff') format('truetype');
+    src: url('../fonts/HYZhengYuan-75S.woff2') format('truetype');
 } */
 
 
@@ -135,14 +135,10 @@ button:hover {
   opacity: 0;
   cursor: pointer;
 }
-#filettf, #initfile {
+#filettf {
   display: none;
 }
 .fileUpload:hover {
   background-color: #67c23a;
   color: #fff;
-}
-.red {
-  color: red;
-  font-weight: 700;
 }
