@@ -9,7 +9,7 @@ const multer = require('multer') //导入multer中间件
 
 // 根据当前文件目录指定文件夹
 const dir = path.resolve(__dirname, '../public/upload');
-// 图片大小限制KB
+//大小限制KB
 const SIZELIMIT = 5000000; //1923148
 
 const storage = multer.diskStorage({
@@ -30,8 +30,24 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage
 });
+const initDir = path.resolve(__dirname, '../public/init');
 
-
+const initStorage = multer.diskStorage({
+     // 指定文件路径
+     destination: function (req, file, cb) {
+        // ！！！相对路径时以node执行目录为基准，避免权限问题，该目录最好已存在*
+        // cb(null, '../uploads');
+        cb(null, initDir);
+    },
+    // 指定文件名
+    filename: function (req, file, cb) {
+        // filedname指向参数key值
+        cb(null, file.originalname);
+    }
+})
+const initFont = multer({
+    storage: initStorage
+})
 
 
 admin.all("*", function (req, res, next) {
@@ -52,10 +68,10 @@ admin.get('/font-test', (req, res) => { // 根据传递过来的文字，打印�
     delete require.cache[require.resolve('../data/test.json')];
     const data = require('../data/test.json');
     
-    // 字体源文件
-    let font = req.query.font;
-    console.log(font, ' 字体包名称')
-    var srcPath = path.join(__dirname, '../assets/fonts/' + font + '.ttf');
+    // 字体源文件 
+    let {font, type} = req.query;
+    console.log(font, ' 字体包名称', type)
+    var srcPath = path.join(__dirname, '../public/init/' + font + '.' + type);
     var text = data.text;
 
     // 文字去重
@@ -87,8 +103,6 @@ admin.get('/font-test', (req, res) => { // 根据传递过来的文字，打印�
     });
 })
 //---------------------------------ttf-->woff2-------------------
-
-
 admin.get('/ttf-to-woff', (req, res) => {
     console.log(req.query.name)
     let fileName = req.query.name;
@@ -103,7 +117,7 @@ admin.get('/ttf-to-woff', (req, res) => {
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
     // ttf格式转换成woff2格式
-    fs.writeFile(path.join(__dirname, '../public/woff/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
+    fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
         // fs.writeFile('../public/woff/' + fileName + '.woff2', ttf2woff2(input), (err) => {
         console.log('write  ing-------finish---------------')
         res.send({
@@ -114,6 +128,103 @@ admin.get('/ttf-to-woff', (req, res) => {
     });
 })
 
+//---------------------------------ttf-->woff-------------------
+admin.get('/ttf-to-woffone', (req, res) => {
+    console.log(req.query.name)
+    let fileName = req.query.name;
+    if (fileName === undefined) {
+        res.send({
+            code: -1,
+            msg: '系统中没有该文件名'
+        })
+    }
+    // 同步读取文件
+    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    fileName = fileName.split('.')[0];
+    // ttf格式转换成woff格式
+    var fontmin = new Fontmin().src(input).use(Fontmin.ttf2woff({
+        deflate: true
+    }))
+    console.log(fontmin)
+    fontmin.run(function (err, files, stream) {
+        if (err) {
+            // 异常捕捉
+            console.error(err);
+        } else {
+            console.log('解析完毕， 保存到路由中，没有保存到本地')
+            fs.writeFile(path.join(__dirname, '../public/woff/'+ fileName + '.woff'), files[0].contents, (err) => {
+                res.send({
+                    code: 200,
+                    msg: '转换成功',
+                    file: fileName + '.woff',
+                })
+            });
+        }
+    });
+})
+
+//---------------------------------ttf-->eot-------------------
+admin.get('/ttf-to-eot', (req, res) => {
+    console.log(req.query.name)
+    let fileName = req.query.name;
+    if (fileName === undefined) {
+        res.send({
+            code: -1,
+            msg: '系统中没有该文件名'
+        })
+    }
+    // 同步读取文件
+    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    fileName = fileName.split('.')[0];
+    // ttf格式转换成eot格式
+    var fontmin = new Fontmin().src(input).use(Fontmin.ttf2eot({
+        deflate: true
+    }))
+    fontmin.run(function (err, files, stream) {
+        if (err) {
+            console.error(err);
+        } else {
+            fs.writeFile(path.join(__dirname, '../public/eot/'+ fileName + '.eot'), files[0].contents, (err) => {
+                res.send({
+                    code: 200,
+                    msg: '转换成功',
+                })
+            });
+        }
+    });
+})
+
+//---------------------------------otf-->ttf-------------------
+admin.get('/otf-to-ttf', (req, res) => {
+    console.log(req.query.name)
+    let fileName = req.query.name;
+    if (fileName === undefined) {
+        res.send({
+            code: -1,
+            msg: '系统中没有该文件名'
+        })
+    }
+    // 同步读取文件
+    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    fileName = fileName.split('.')[0];
+    // otf格式转换成ttf格式
+    var fontmin = new Fontmin().src(input).use(Fontmin.otf2ttf({
+        deflate: true
+    }))
+    fontmin.run(function (err, files, stream) {
+        if (err) {
+            // 异常捕捉
+            console.error(err);
+        } else {
+            fs.writeFile(path.join(__dirname, '../public/ttf/'+ fileName + '.ttf'), files[0].contents, (err) => {
+                res.send({
+                    code: 200,
+                    msg: '转换成功',
+                })
+            });
+        }
+    });
+})
 //--------------------------------upload------------------------------------
 
 admin.post('/upload', upload.single('file'), async (req, res) => {
@@ -167,6 +278,41 @@ admin.post('/upload', upload.single('file'), async (req, res) => {
     //   }
     // })
 });
+
+admin.post('/initFont', initFont.single('file'), async(req, res) => {
+    if (req.file === undefined) {
+        return res.send({
+            errno: -1,
+            msg: 'no file'
+        });
+    }
+    const {
+        size,
+        originalname,
+        filename
+    } = req.file;
+    const types = ['ttf', 'woff' , 'woff2'];
+    const textName = originalname.split('.')[0];
+    const tmpTypes = originalname.split('.')[1];
+    console.log('fileInfo', size, originalname, tmpTypes, types.indexOf(tmpTypes))
+    // 不检查文件大小
+    // 检查文件类型
+    if (types.indexOf(tmpTypes) < 0) {
+        return res.send({
+            errno: -1,
+            msg: 'not accepted filetype'
+        });
+    }
+    // 路径可根据设置的静态目录指定
+    const url = '/public/init/' + filename;
+    res.json({
+        errno: 0,
+        msg: 'upload success',
+        type: tmpTypes,
+        url,
+        fileName: textName
+    });
+})
 
 // 传送文字给页面
 admin.post('/send-word', (req, res) => {
