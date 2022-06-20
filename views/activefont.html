@@ -29,6 +29,7 @@
 
         <p>1.下载页面上所有字的字体资源 （上一步上传的为何种格式，现在下载为何种格式）</p>
         <button class="btn">下载字体资源</button>
+        <button class="defaultFont">下载页面默认字体资源（黑体）</button>
 
         <p class="bottomdash"></p>
         <p>2.上传文件</p>
@@ -45,10 +46,12 @@
         <p class="bottomdash"></p>
         <p>3.下载不同格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半，）</p>
         <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快</p>
+
         <button class="change conver">ttf转换woff2</button>
         <button class="change conver">ttf转换woff</button>
         <button class="change conver">ttf转换eot</button>
         <button class="change conver">otf转换ttf</button>
+
         <p class="bottomdash"></p>
         <p>4.如果页面上的字体资源不足，欢迎补充提交，然后你会在文字后面看到新增的文字，但是没有字体样式，请重新刷新页面，字体资源重新加载，就能下载最新的ttf文件和woff2文件了</p>
         <textarea class="writeBox" id="write"></textarea>
@@ -77,7 +80,7 @@
     </div>
 
 
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script> -->
     <script src="./js/axios.min.js"></script>
     <script>
 
@@ -321,7 +324,6 @@
         function initFont() {
             let form = document.getElementById('uploadInitFont'),
                 formData = new FormData(form);
-            console.log(form, formData, '----------')
             const str = document.getElementById('textFont').innerText;
             document.getElementById('textFont').innerText = ''
             axios.post('http://localhost:3000/admin/initFont', formData, {
@@ -345,6 +347,7 @@
         function uploadFile() {
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
+            
             console.log('uploadFile--ttf', document.querySelector("#filettf"))
 
             axios.post('http://localhost:3000/admin/upload', formData, {
@@ -356,35 +359,26 @@
             }, err => {
                 alert("网络连接失败,稍后重试", err);
             })
-            /*
-            $.ajax({
-                url: "http://localhost:3000/admin/upload",
-                type: "post",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (res) {
-                    console.log(res);
-                    uploadName = res.fileName;
-                },
-                error: function (err) {
-                    alert("网络连接失败,稍后重试", err);
-                }
-            })
-            */
         }
     
-        //
-        window.onbeforeunload = () => {
-            axios({
-                    method: 'get',
-                    url: "http://localhost:3000/admin/removeFile",
-                }).then((res) => {
-                    console.log(11111111, res)
-                }).catch((err) => {
-                    alert("网络连接失败,稍后重试", err);
-                })
+        document.querySelector(".defaultFont").onclick = () => {
+            let a = document.createElement('a');
+            a.download = 'heiti.ttf';
+            a.href = 'http://localhost:3000/init/heiti.ttf';
+            let event = new MouseEvent('click');
+            a.dispatchEvent(event); 
         }
+        // 页面关闭之前触发函数，不靠谱，页面已经关闭，但是接口数据未传到后端
+        // window.onbeforeunload = () => {
+        //     axios({
+        //         method: 'get',
+        //         url: "http://localhost:3000/admin/removeFile",
+        //     }).then((res) => {
+        //         console.log(11111111, res)
+        //     }).catch((err) => {
+        //         alert("网络连接失败,稍后重试", err);
+        //     })
+        // }
     </script>
 </body>
 

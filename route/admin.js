@@ -303,10 +303,20 @@ admin.post('/initFont', initFont.single('file'), async(req, res) => {
         originalname,
         filename
     } = req.file;
-    const types = ['ttf', 'woff' , 'woff2'];
+    const types = ['ttf', 'woff', 'woff2'];
     const textName = originalname.split('.')[0];
     const tmpTypes = originalname.split('.')[1];
-    console.log('fileInfo', size, originalname, tmpTypes, types.indexOf(tmpTypes))
+
+    files = fs.readdirSync(path.resolve(__dirname, '../public/init'));
+    files.forEach((file) => {
+        if(file != filename && file != 'heiti.ttf') {
+            let curPath = path.resolve(__dirname, '../public/init') + "/" + file;
+            fs.unlinkSync(curPath); //删除文件
+        }
+    });
+
+
+    console.log('fileInfo', size, originalname, tmpTypes, filename)
     // 不检查文件大小
     // 检查文件类型
     if (types.indexOf(tmpTypes) < 0) {
@@ -369,10 +379,5 @@ admin.post('/write-word', (req, res) => {
 
 })
 
-
-admin.get('/removeFile', (req, res) => {
-    console.log(1111111)
-    
-})
 
 module.exports = admin;
