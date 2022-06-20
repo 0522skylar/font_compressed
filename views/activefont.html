@@ -14,6 +14,10 @@
     <p style="text-align: center;">现在引用的字体包是/assets/fonts文件夹中的<span id="fontName"></span></p>
     <div class="setup">
         <p>请按如下步骤执行：</p>
+        <p>0.上传字体资源</p>
+        <button class="firstSend">上传字体资源（ttf格式）</button>
+
+
         <p>1.下载页面上所有字的字体资源</p>
         <button class="btn">下载ttf</button>
 
@@ -96,6 +100,7 @@
                 showDom.style.background = '#c2e7b0'
             }
         }
+        
         // 获取页面文字
         function getWord() {
             const str = document.querySelector('#special').innerText;
@@ -141,6 +146,7 @@
                 alert("网络连接失败,稍后重试", err);
             })
         }
+        
         // 上传名字
         let uploadName = '';
 
@@ -174,7 +180,6 @@
                 })
             }
         }
-
 
         // 上传ttf文件
         function uploadFile() {
