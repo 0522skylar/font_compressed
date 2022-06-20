@@ -10,14 +10,12 @@ const multer = require('multer') //导入multer中间件
 // 根据当前文件目录指定文件夹
 const dir = path.resolve(__dirname, '../public/upload');
 //大小限制KB
-const SIZELIMIT = 5000000; //1923148
+const SIZELIMIT = 50000000; //1923148  18412920 
 
 const storage = multer.diskStorage({
     // 指定文件路径
     destination: function (req, file, cb) {
         // ！！！相对路径时以node执行目录为基准，避免权限问题，该目录最好已存在*
-        // cb(null, '../uploads');
-
         cb(null, dir);
     },
     // 指定文件名
@@ -36,7 +34,6 @@ const initStorage = multer.diskStorage({
      // 指定文件路径
      destination: function (req, file, cb) {
         // ！！！相对路径时以node执行目录为基准，避免权限问题，该目录最好已存在*
-        // cb(null, '../uploads');
         cb(null, initDir);
     },
     // 指定文件名
@@ -118,7 +115,6 @@ admin.get('/ttf-to-woff', (req, res) => {
     fileName = fileName.split('.')[0];
     // ttf格式转换成woff2格式
     fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
-        // fs.writeFile('../public/woff/' + fileName + '.woff2', ttf2woff2(input), (err) => {
         console.log('write  ing-------finish---------------')
         res.send({
             code: 200,
@@ -139,13 +135,12 @@ admin.get('/ttf-to-woffone', (req, res) => {
         })
     }
     // 同步读取文件
-    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
     // ttf格式转换成woff格式
     var fontmin = new Fontmin().src(input).use(Fontmin.ttf2woff({
         deflate: true
     }))
-    console.log(fontmin)
     fontmin.run(function (err, files, stream) {
         if (err) {
             // 异常捕捉
@@ -156,7 +151,7 @@ admin.get('/ttf-to-woffone', (req, res) => {
                 res.send({
                     code: 200,
                     msg: '转换成功',
-                    file: fileName + '.woff',
+                    url: fileName + '.woff',
                 })
             });
         }
@@ -174,7 +169,7 @@ admin.get('/ttf-to-eot', (req, res) => {
         })
     }
     // 同步读取文件
-    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
     // ttf格式转换成eot格式
     var fontmin = new Fontmin().src(input).use(Fontmin.ttf2eot({
@@ -188,6 +183,7 @@ admin.get('/ttf-to-eot', (req, res) => {
                 res.send({
                     code: 200,
                     msg: '转换成功',
+                    url: fileName + '.eot'
                 })
             });
         }
@@ -205,7 +201,7 @@ admin.get('/otf-to-ttf', (req, res) => {
         })
     }
     // 同步读取文件
-    var input = fs.readFileSync(path.join(__dirname, '../public/init/'+ fileName));
+    var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
     // otf格式转换成ttf格式
     var fontmin = new Fontmin().src(input).use(Fontmin.otf2ttf({
@@ -220,6 +216,7 @@ admin.get('/otf-to-ttf', (req, res) => {
                 res.send({
                     code: 200,
                     msg: '转换成功',
+                    url: fileName + '.ttf'
                 })
             });
         }
@@ -241,7 +238,7 @@ admin.post('/upload', upload.single('file'), async (req, res) => {
         originalname,
         filename
     } = req.file;
-    const types = ['ttf'];
+    const types = ['ttf', 'otf'];
     const tmpTypes = originalname.split('.')[1];
     console.log('fileInfo', size, originalname, filename)
     // 检查文件大小
