@@ -12,6 +12,9 @@
 </head>
 
 <body>
+    <div class="mask" style="display: block;">
+        <div class="progress-9"></div>
+    </div>
     <h1>压缩字体包测试</h1>
     <p style="text-align: center;">现在引用的字体包是/public/init文件夹中的<span id="fontName"></span></p>
     <div class="setup">
@@ -85,22 +88,34 @@
         let fileType = 'ttf'; // woff2
         
         // 动态加载字体资源, 页面首次加载字体资源创建元素
-        function activeFontSource(ttype) {
-            document.getElementById('fontName').innerText = fontname;
+       async function activeFontSource(ttype) {
+            // document.getElementById('fontName').innerText = fontname;
             let type = ttype || 'ttf';
-            const style = document.createElement('style');
-            style.innerHTML = `
-            @font-face {
-                font-family: ${fontname};
-                src: url("http://localhost:3000/admin/font-test?font=${fontname}&type=${type}");
-            }
-            .text {
-                font-family: ${fontname};
-                font-display: block;
-            }
-            `;
-            console.log(`http://localhost:3000/admin/font-test?font=${fontname}&type=${type}`, '---------active-------')
-            document.head.appendChild(style);
+            // const style = document.createElement('style');
+            // style.innerHTML = `
+            // @font-face {
+            //     font-family: ${fontname};
+            //     src: url("http://localhost:3000/admin/font-test?font=${fontname}&type=${type}");
+            // }
+            // .text {
+            //     font-family: ${fontname};
+            //     font-display: block;
+            // }
+            // `;
+            // document.head.appendChild(style);
+
+            console.log(new Date().getTime())
+            document.querySelector(".mask").style.display = 'block';
+            const font = new FontFace(
+                "op-design",
+                "url(" + `http://localhost:3000/admin/font-test?font=${fontname}&type=${type}` + ")"
+            );
+            await font.load();
+            document.fonts.add(font);
+            document.querySelector(".mask").style.display = 'none';
+            console.log(new Date().getTime())
+
+
         }
         
         // 页面加载字体资源更换内容
