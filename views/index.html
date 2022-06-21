@@ -60,7 +60,6 @@
         <textarea class="writeBox" id="write"></textarea>
         <button class="change" onclick="addWord()">提交</button>
 
-        <button id="test">接口测试</button>
     </div>
 
     <div id="special" style="display: none;">﹟ `!^…！~ #﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=
@@ -85,7 +84,7 @@
 
     <script src="./js/axios.min.js"></script>
     <script>
-         let fontname = 'heiti'; //HYZhengYuan-75S
+        let fontname = 'heiti'; //HYZhengYuan-75S
         let fileType = 'ttf'; // woff2
         
         // 动态加载字体资源, 页面首次加载字体资源创建元素
@@ -298,28 +297,7 @@
                 })
             }
         }
-        
-        // 测试接口
-        document.getElementById('test').onclick = () => {
-            console.log('upload', fontname)
-            if (fontname.length != 0) {
-                axios({
-                    method: 'get',
-                    url: "http://localhost:3000/home/ttf-to-woffone?name=" + fontname + '.'+ fileType,
-                }).then((res) => {
-                    console.log(res.data);
-                    alert(res.data.msg)
-                    let a = document.createElement('a'); 
-                    a.download = res.data.file;
-                    a.href = 'http://localhost:3000/woff/' + res.data.file;
-                    let event = new MouseEvent('click') 
-                    a.dispatchEvent(event); 
-                }).catch((err) => {
-                    alert("网络连接失败,稍后重试", err);
-                })
-            }
-        }
-        
+
         // 上传需要加载的文件
         function initFont() {
             let form = document.getElementById('uploadInitFont'),
