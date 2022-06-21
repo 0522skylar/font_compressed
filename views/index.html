@@ -215,7 +215,7 @@
         let changeArr = document.querySelectorAll('.conver');
         
         changeArr[0].onclick = () => {
-            console.log('upload', uploadName)
+            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -228,7 +228,9 @@
                     a.href = 'http://localhost:3000/woff2/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
+                    document.querySelector(".mask").style.display = 'none';
                 }).catch((err) => {
+                    document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
             }

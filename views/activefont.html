@@ -104,7 +104,6 @@
             // `;
             // document.head.appendChild(style);
 
-            console.log(new Date().getTime())
             document.querySelector(".mask").style.display = 'block';
             const font = new FontFace(
                 "op-design",
@@ -113,27 +112,8 @@
             await font.load();
             document.fonts.add(font);
             document.querySelector(".mask").style.display = 'none';
-            console.log(new Date().getTime())
-
-
         }
         
-        // 页面加载字体资源更换内容
-        function getChangeRes(ttype) {
-            document.getElementById('fontName').innerText = fontname;
-            let type = ttype || 'ttf';
-            const style = document.getElementsByTagName('style')[0];
-            style.innerHTML = `
-            @font-face {
-                font-family: ${fontname};
-                src: url("http://localhost:3000/admin/font-test?font=${fontname}&type=${type}");
-            }
-            .text {
-                font-family: ${fontname};
-                font-display: block;
-            }
-            `;
-        }
         
         // 显示选择后的文件
         function showFile() {
@@ -228,7 +208,7 @@
         let changeArr = document.querySelectorAll('.conver');
         
         changeArr[0].onclick = () => {
-            console.log('upload', uploadName)
+            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -241,7 +221,9 @@
                     a.href = 'http://localhost:3000/woff2/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
+                    document.querySelector(".mask").style.display = 'none';
                 }).catch((err) => {
+                    document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
             }
@@ -249,7 +231,7 @@
         
         // ttf-to-woff
         changeArr[1].onclick = () => {
-            console.log('upload', uploadName)
+            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -262,7 +244,9 @@
                     a.href = 'http://localhost:3000/woff/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
+                    document.querySelector(".mask").style.display = 'none';
                 }).catch((err) => {
+                    document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
             }
@@ -270,7 +254,7 @@
 
         // /ttf-to-eot
         changeArr[2].onclick = () => {
-            console.log('upload', uploadName)
+            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -283,7 +267,9 @@
                     a.href = 'http://localhost:3000/eot/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
+                    document.querySelector(".mask").style.display = 'none';
                 }).catch((err) => {
+                    document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
             }
@@ -291,7 +277,7 @@
         //otf-to-ttf
         
         changeArr[3].onclick = () => {
-            console.log('upload', uploadName)
+            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
                 axios({
                     method: 'get',
@@ -304,7 +290,9 @@
                     a.href = 'http://localhost:3000/ttf/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
+                    document.querySelector(".mask").style.display = 'none';
                 }).catch((err) => {
+                    document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
             }
