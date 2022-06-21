@@ -58,10 +58,8 @@ admin.all("*", function (req, res, next) {
 })
 
 
-
 //--------------------------------动态解析字体------------------
 
-const data = require('../data/test.json');
 admin.get('/font-test', (req, res) => { // 根据传递过来的文字，打印输出包含该文字的字体包
     delete require.cache[require.resolve('../data/test.json')];
     const data = require('../data/test.json');
