@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta name="referrer" content="origin"> -->
-    <meta name="referrer" content="no-referrer"> 
+    <meta name="referrer" content="no-referrer">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./css/index.css">
@@ -21,11 +21,12 @@
         <p>请按如下步骤执行：</p>
         <p>1.上传更换字体资源</p>
         <form id="uploadInitFont" enctype="multipart/form-data" method="post">
-            <input type="file" name="file" id="initfile" oninput="showFile_one()"/>
+            <input type="file" name="file" id="initfile" oninput="showFile_one()" />
             <div class="fileUpload" onclick="document.getElementById('initfile').click()" id="seleinit">
                 选择文件
             </div>
-            <input type="button" name="submit" value="上传字体资源（ttf,woff,woff2）" onclick="initFont()" class="initfile submit">
+            <input type="button" name="submit" value="上传字体资源（ttf,woff,woff2）" onclick="initFont()"
+                class="initfile submit">
             <!-- form表单提交数据不让跳转办法,button标签会自动跳转 -->
 
         </form>
@@ -38,7 +39,7 @@
         <p>3.上传文件</p>
 
         <form id="upload" enctype="multipart/form-data" method="post">
-            <input type="file" name="file" id="filettf" oninput="showFile()"/>
+            <input type="file" name="file" id="filettf" oninput="showFile()" />
             <div class="fileUpload" onclick="document.getElementById('filettf').click()">
                 选择文件
             </div>
@@ -48,7 +49,8 @@
 
         <p class="bottomdash"></p>
         <p>4.下载不同格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半，）</p>
-        <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快</p>
+        <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快
+        </p>
 
         <button class="change conver">ttf转换woff2</button>
         <button class="change conver">ttf转换woff</button>
@@ -86,9 +88,11 @@
         // 注意：使用input type=file时，用元素包裹input，更改input默认样式时，会导致上传时获取不到input选中的文件，导致上传失败，所以更改input样式时，用同级元素替代input，点击同级元素时，触发input的点击事件
         let fontname = 'heiti'; //HYZhengYuan-75S
         let fileType = 'ttf'; // woff2
-        
+        // 上传名字
+        let uploadName = '';
+
         // 动态加载字体资源, 页面首次加载字体资源创建元素
-       async function activeFontSource(ttype) {
+        async function activeFontSource(ttype) {
             // document.getElementById('fontName').innerText = fontname;
             let type = ttype || 'ttf';
             // const style = document.createElement('style');
@@ -113,14 +117,14 @@
             document.fonts.add(font);
             document.querySelector(".mask").style.display = 'none';
         }
-        
-        
+
+
         // 显示选择后的文件
         function showFile() {
             let dom = document.querySelector("#filettf");
             let showDom = document.querySelector("#fileUpload");
             let val = dom.value;
-            if(val.length != 0) {
+            if (val.length != 0) {
                 showDom.innerText = '已选择'
                 showDom.style.background = '#e8f3ff'
             }
@@ -129,13 +133,13 @@
                 showDom.style.background = '#c2e7b0'
             }
         }
-        
+
         // 显示选择后的文件1
         function showFile_one() {
             let dom = document.querySelector("#initfile");
             let showDom = document.querySelector("#seleinit");
             let val = dom.value;
-            if(val.length != 0) {
+            if (val.length != 0) {
                 showDom.innerText = '已选择'
                 showDom.style.background = '#e8f3ff'
             }
@@ -144,7 +148,7 @@
                 showDom.style.background = '#c2e7b0'
             }
         }
-        
+
         // 获取页面文字
         function getWord() {
             const str = document.querySelector('#special').innerText;
@@ -191,25 +195,25 @@
                 alert("网络连接失败,稍后重试", err);
             })
         }
-        
-        // 上传名字
-        let uploadName = '';
+
+
 
         // 下载ttf
         document.querySelector(".btn").onclick = () => {
-            let a = document.createElement('a'); 
+            let a = document.createElement('a');
             a.download = fontname + '.' + fileType;
-            a.href = 'http://localhost:3000/admin/font-test?font=' + fontname +'&type='+fileType; 
-            let event = new MouseEvent('click') 
-            a.dispatchEvent(event); 
+            a.href = 'http://localhost:3000/admin/font-test?font=' + fontname + '&type=' + fileType;
+            let event = new MouseEvent('click')
+            a.dispatchEvent(event);
         }
 
         // 下载woff2
         let changeArr = document.querySelectorAll('.conver');
-        
+
         changeArr[0].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
+
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/admin/ttf-to-woff?name=" + uploadName,
@@ -226,13 +230,15 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
-        
+
         // ttf-to-woff
         changeArr[1].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/admin/ttf-to-woffone?name=" + uploadName,
@@ -249,13 +255,16 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
 
         // /ttf-to-eot
         changeArr[2].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
+
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/admin/ttf-to-eot?name=" + uploadName,
@@ -272,13 +281,16 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
         //otf-to-ttf
-        
+
         changeArr[3].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
+
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/admin/otf-to-ttf?name=" + uploadName,
@@ -295,10 +307,12 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
-        
-        
+
+
         // 上传需要加载的文件
         function initFont() {
             let form = document.getElementById('uploadInitFont'),
@@ -310,9 +324,9 @@
             }).then(res => {
                 console.log(res.data);
                 fontname = res.data.fileName;
-                fileType =  res.data.type;
+                fileType = res.data.type;
                 alert(res.data.msg)
-                
+
                 document.getElementById('textFont').innerText = str;
 
                 activeFontSource(fileType)
@@ -326,7 +340,7 @@
         function uploadFile() {
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
-            
+
             console.log('uploadFile--ttf', document.querySelector("#filettf"))
 
             axios.post('http://localhost:3000/admin/upload', formData, {
@@ -339,13 +353,13 @@
                 alert("网络连接失败,稍后重试", err);
             })
         }
-    
+
         document.querySelector(".defaultFont").onclick = () => {
             let a = document.createElement('a');
             a.download = 'heiti.ttf';
             a.href = 'http://localhost:3000/init/heiti.ttf';
             let event = new MouseEvent('click');
-            a.dispatchEvent(event); 
+            a.dispatchEvent(event);
         }
     </script>
 </body>

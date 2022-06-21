@@ -215,8 +215,8 @@
         let changeArr = document.querySelectorAll('.conver');
         
         changeArr[0].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/home/ttf-to-woff?name=" + uploadName,
@@ -233,13 +233,15 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
         
         // ttf-to-woff
         changeArr[1].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/home/ttf-to-woffone?name=" + uploadName,
@@ -256,13 +258,15 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
 
         // /ttf-to-eot
         changeArr[2].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/home/ttf-to-eot?name=" + uploadName,
@@ -279,13 +283,14 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
         //otf-to-ttf
-        
         changeArr[3].onclick = () => {
-            document.querySelector(".mask").style.display = 'block';
             if (uploadName.length != 0) {
+                document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
                     url: "http://localhost:3000/home/otf-to-ttf?name=" + uploadName,
@@ -302,6 +307,8 @@
                     document.querySelector(".mask").style.display = 'none';
                     alert("网络连接失败,稍后重试", err);
                 })
+            } else {
+                alert('未执行第三步上传文件')
             }
         }
 
