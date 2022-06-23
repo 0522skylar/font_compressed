@@ -14,14 +14,14 @@
         <div class="progress-9"></div>
     </div>
     <h1>压缩字体包</h1>
-    <p class="instructions">本页包含常用6691个字，其中有繁体、简体、特殊字符，如不完整，欢迎补充！</p>
+    <!-- <p class="instructions">本页包含常用6691个字，其中有繁体、简体、特殊字符，如不完整，欢迎补充！</p>
     <p class="instructions">现在引用的字体包是/public/init文件夹中的<span id="fontName"></span></p>
     <p class="instructions">特别说明：下载ttf文件名一致，如需下载不同资源，上传时更改文件名；</p>
     <p class="instructions">可以直接转换ttf格式，与assets文件中的字体包资源不一样，也能进行转换</p>
     <p class="instructions">上传ttf文件大小比较大时，转换woff2时需要时间会变长，如果出错不能下载window窗口会弹窗报错，如果没有任何提示请耐心等待~~</p>
-    <p class="instructions">想要对字体资源进行测试，欢迎点击<a href="/active" style="color: #67c23a;">链接</a></p>
+    <p class="instructions">想要对字体资源进行测试，欢迎点击<a href="/active" style="color: #67c23a;">链接</a></p> -->
     <div class="setup">
-        <p>请按如下步骤执行：</p>
+        <p>本页面包含的功能：</p>
         <p>1.上传更换字体资源</p>
         <form id="uploadInitFont" enctype="multipart/form-data" method="post">
             <input type="file" name="file" id="initfile" oninput="showFile_one()"/>
@@ -38,7 +38,7 @@
         <button class="defaultFont">下载页面默认字体资源（黑体）</button>
 
         <p class="bottomdash"></p>
-        <p>3.上传文件</p>
+        <p>3.根据上传的文件转换所需格式（说明： woff2格式比ttf格式的文件大小压缩了一半，）</p>
 
         <form id="upload" enctype="multipart/form-data" method="post">
             <input type="file" name="file" id="filettf" oninput="showFile()"/>
@@ -48,18 +48,18 @@
             <input type="button" name="submit" value="上传(ttf,otf)" onclick="uploadFile()" class="submit">
             <!-- form表单提交数据不让跳转办法,button标签会自动跳转 -->
         </form>
-
         <p class="bottomdash"></p>
-        <p>4.下载不同格式的字体资源（说明： woff2格式比ttf格式的文件大小压缩了一半，）</p>
-        <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快</p>
-
         <button class="change conver">ttf转换woff2</button>
         <button class="change conver">ttf转换woff</button>
         <button class="change conver">ttf转换eot</button>
         <button class="change conver">otf转换ttf</button>
 
         <p class="bottomdash"></p>
-        <p>5.如果页面上的字体资源不足，欢迎补充提交，然后你会在文字后面看到新增的文字，但是没有字体样式，请重新刷新页面，字体资源重新加载，就能下载最新的ttf文件和woff2文件了</p>
+        <!-- <p>4.下载不同格式的字体资源</p>
+        <p class="red">ttf转换woff2(ttf文件很大时，转换速度很慢,只要页面不报错，后端程序正在进行转换中，如果出错，会有弹窗提醒，此时最好不要随便点击，同时触发其他功能，会导致页面卡死)，其他转换速度很快</p>
+        <p class="bottomdash"></p> -->
+
+        <p>4.如果页面上的字体资源不足，欢迎补充提交，然后你会在文字后面看到新增的文字，但是没有字体样式，请重新刷新页面，字体资源重新加载，就能下载最新的ttf文件和woff2文件了</p>
         <textarea class="writeBox" id="write"></textarea>
         <button class="change" onclick="addWord()">提交</button>
 
