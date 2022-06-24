@@ -2,7 +2,7 @@ const express = require('express')
 // 处理路径
 const path = require('path');
 // 引入body-parse模块, 用来处理post请求参数
-const bodyPaser = require('body-parser');
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
 //开放静态资源文件
@@ -13,10 +13,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 //当渲染后缀名为art的模板时,所使用的模板引擎是什么
 app.engine('html', require('express-art-template'));
-app.use(bodyPaser.json({
+app.use(bodyParser.json({
   limit: '10mb'
 })); // for parsing application/json
-app.use(bodyPaser.urlencoded({
+app.use(bodyParser.urlencoded({
   limit: '10mb',
   extended: true
 })); // for parsing application/x-www-form-urlencoded

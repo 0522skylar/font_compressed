@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     },
     // 指定文件名
     filename: function (req, file, cb) {
-        // filedname指向参数key值
+        // filedName指向参数key值
         cb(null, file.originalname);
     }
 });
@@ -39,7 +39,7 @@ const initStorage = multer.diskStorage({
     },
     // 指定文件名
     filename: function (req, file, cb) {
-        // filedname指向参数key值
+        // filedName指向参数key值
         cb(null, file.originalname);
     }
 })
