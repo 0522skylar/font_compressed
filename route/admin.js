@@ -117,7 +117,7 @@ admin.get('/ttf-to-woff', (req, res) => {
     fileName = fileName.split('.')[0];
     // ttf格式转换成woff2格式
     fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
-        console.log('writeing-------finish---------------', err)
+        console.log('writing-------finish---------------', err)
         res.send({
             code: 200,
             msg: '转换成功',

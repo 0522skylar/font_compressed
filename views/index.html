@@ -97,7 +97,7 @@
             document.querySelector(".mask").style.display = 'block';
             const font = new FontFace(
                 "op-design",
-                "url(" + `http://localhost:3000/home/font-test?font=${fontname}&type=${type}` + ")"
+                "url(" + `./home/font-test?font=${fontname}&type=${type}` + ")"
             );
             await font.load();
             document.fonts.add(font);
@@ -113,7 +113,7 @@
             style.innerHTML = `
             @font-face {
                 font-family: ${fontname};
-                src: url("http://localhost:3000/home/font-test?font=${fontname}&type=${type}");
+                src: url("./home/font-test?font=${fontname}&type=${type}");
             }
             .text {
                 font-family: ${fontname};
@@ -157,7 +157,7 @@
             const str = document.querySelector('#special').innerText;
             axios({
                 method: 'post',
-                url: "http://localhost:3000/home/send-word",
+                url: "./home/send-word",
                 data: {
                     text: str
                 }
@@ -186,7 +186,7 @@
             console.log('addtext')
             axios({
                 method: 'post',
-                url: "http://localhost:3000/home/write-word",
+                url: "./home/write-word",
                 data: {
                     addtext: textArr.join('')
                 }
@@ -206,7 +206,7 @@
         document.querySelector(".btn").onclick = () => {
             let a = document.createElement('a'); 
             a.download = fontname + '.' + fileType;
-            a.href = 'http://localhost:3000/home/font-test?font=' + fontname +'&type='+fileType; 
+            a.href = './home/font-test?font=' + fontname +'&type='+fileType; 
             let event = new MouseEvent('click') 
             a.dispatchEvent(event); 
         }
@@ -219,13 +219,13 @@
                 document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/home/ttf-to-woff?name=" + uploadName,
+                    url: "./home/ttf-to-woff?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
                     let a = document.createElement('a'); // 创建一个a节点插入的document
                     a.download = res.data.url;
-                    a.href = 'http://localhost:3000/woff2/' + res.data.url; // 将图片的src赋值给a节点的href
+                    a.href = './woff2/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
                     document.querySelector(".mask").style.display = 'none';
@@ -244,13 +244,13 @@
                 document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/home/ttf-to-woffone?name=" + uploadName,
+                    url: "./home/ttf-to-woffone?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
                     let a = document.createElement('a'); // 创建一个a节点插入的document
                     a.download = res.data.url;
-                    a.href = 'http://localhost:3000/woff/' + res.data.url; // 将图片的src赋值给a节点的href
+                    a.href = './woff/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
                     document.querySelector(".mask").style.display = 'none';
@@ -269,13 +269,13 @@
                 document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/home/ttf-to-eot?name=" + uploadName,
+                    url: "./home/ttf-to-eot?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
                     let a = document.createElement('a'); // 创建一个a节点插入的document
                     a.download = res.data.url;
-                    a.href = 'http://localhost:3000/eot/' + res.data.url; // 将图片的src赋值给a节点的href
+                    a.href = './eot/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
                     document.querySelector(".mask").style.display = 'none';
@@ -293,13 +293,13 @@
                 document.querySelector(".mask").style.display = 'block';
                 axios({
                     method: 'get',
-                    url: "http://localhost:3000/home/otf-to-ttf?name=" + uploadName,
+                    url: "./home/otf-to-ttf?name=" + uploadName,
                 }).then((res) => {
                     console.log(res.data);
                     alert(res.data.msg)
                     let a = document.createElement('a'); // 创建一个a节点插入的document
                     a.download = res.data.url;
-                    a.href = 'http://localhost:3000/ttf/' + res.data.url; // 将图片的src赋值给a节点的href
+                    a.href = './ttf/' + res.data.url; // 将图片的src赋值给a节点的href
                     let event = new MouseEvent('click') // 模拟鼠标click点击事件
                     a.dispatchEvent(event); // 触发鼠标点击事件
                     document.querySelector(".mask").style.display = 'none';
@@ -318,7 +318,7 @@
                 formData = new FormData(form);
             const str = document.getElementById('textFont').innerText;
             document.getElementById('textFont').innerText = ''
-            axios.post('http://localhost:3000/home/initFont', formData, {
+            axios.post('./home/initFont', formData, {
                 'Content-type': 'multipart/form-data'
             }).then(res => {
                 console.log(res.data);
@@ -342,7 +342,7 @@
             
             console.log('uploadFile--ttf', document.querySelector("#filettf"))
 
-            axios.post('http://localhost:3000/home/upload', formData, {
+            axios.post('./home/upload', formData, {
                 'Content-type': 'multipart/form-data'
             }).then(res => {
                 console.log(res.data);
@@ -356,7 +356,7 @@
         document.querySelector(".defaultFont").onclick = () => {
             let a = document.createElement('a');
             a.download = 'heiti.ttf';
-            a.href = 'http://localhost:3000/init/heiti.ttf';
+            a.href = './init/heiti.ttf';
             let event = new MouseEvent('click');
             a.dispatchEvent(event); 
         }
