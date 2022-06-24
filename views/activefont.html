@@ -122,36 +122,28 @@
             document.fonts.add(font);
             document.querySelector(".mask").style.display = 'none';
         }
-
-
-        // 显示选择后的文件
-        function changeFontRes() {
-            let dom = document.querySelector("#filettf");
-            let showDom = document.querySelector("#fileUpload");
-            let val = dom.value;
-            if (val.length != 0) {
-                let form = document.getElementById('upload'),
-                formData = new FormData(form);
-
-                console.log('uploadFile--ttf', document.querySelector("#filettf"))
-
-                axios.post('./admin/upload', formData, {
-                    'Content-type': 'multipart/form-data'
-                }).then(res => {
-                    console.log(res.data);
-                    uploadName = res.data.fileName;
-                    alert(res.data.msg)
-                }, err => {
-                    alert("网络连接失败,稍后重试", err);
-                })
-            }
-            else {
-                showDom.innerText = '选择文件'
-                showDom.style.background = '#c2e7b0'
-            }
+        
+        // 获取页面文字
+        function getWord() {
+            const str = document.querySelector('#special').innerText;
+            axios({
+                method: 'post',
+                url: "./admin/send-word",
+                data: {
+                    text: str
+                }
+            }).then((res) => {
+                document.getElementById('textFont').innerText = res.data.text
+                document.getElementById('textUsually').innerText = res.data.text
+                activeFontSource(fileType)
+                console.log('getword--------')
+            }).catch((err) => {
+                alert("网络连接失败,稍后重试", err);
+            })
         }
-
-        // 显示选择后的文件1
+        
+        getWord()
+        // 1.更换页面字体资源
         function initFontRes() {
             let dom = document.querySelector("#initfile");
             let showDom = document.querySelector("#seleinit");
@@ -182,56 +174,7 @@
             }
         }
 
-        // 获取页面文字
-        function getWord() {
-            const str = document.querySelector('#special').innerText;
-            axios({
-                method: 'post',
-                url: "./admin/send-word",
-                data: {
-                    text: str
-                }
-            }).then((res) => {
-                document.getElementById('textFont').innerText = res.data.text
-                document.getElementById('textUsually').innerText = res.data.text
-                activeFontSource(fileType)
-                console.log('getword--------')
-            }).catch((err) => {
-                alert("网络连接失败,稍后重试", err);
-            })
-        }
-        getWord()
-
-        // 添加文字
-        function addWord() {
-            let addText = document.getElementById("write").value;
-            let pageText = document.getElementById("textFont").innerText;
-            let beforeLen = pageText.length;
-            pageText = pageText + addText;
-            let textArr = [...new Set(pageText.split(''))]
-            if (textArr.length === beforeLen) {
-                alert('这些字已经在页面上已存在了哦~~~')
-                return;
-            }
-            console.log('addtext')
-            axios({
-                method: 'post',
-                url: "./admin/write-word",
-                data: {
-                    addtext: textArr.join('')
-                }
-            }).then((res) => {
-                alert(res.data.msg)
-                getWord()
-            }).catch((err) => {
-                console.log('error', err)
-                alert("网络连接失败,稍后重试", err);
-            })
-        }
-
-
-
-        // 下载ttf
+        // 2.下载页面上所有字的字体资源
         document.querySelector(".btn").onclick = () => {
             let a = document.createElement('a');
             a.download = fontname + '.' + fileType;
@@ -240,7 +183,41 @@
             a.dispatchEvent(event);
         }
 
-        // 下载woff2
+        // 下载页面默认字体黑体
+        document.querySelector(".defaultFont").onclick = () => {
+            let a = document.createElement('a');
+            a.download = 'heiti.ttf';
+            a.href = './init/heiti.ttf';
+            let event = new MouseEvent('click');
+            a.dispatchEvent(event);
+        }
+        
+        // 3.上传字体转换不同格式
+        function changeFontRes() {
+            let dom = document.querySelector("#filettf");
+            let showDom = document.querySelector("#fileUpload");
+            let val = dom.value;
+            if (val.length != 0) {
+                let form = document.getElementById('upload'),
+                formData = new FormData(form);
+
+                console.log('uploadFile--ttf', document.querySelector("#filettf"))
+
+                axios.post('./admin/upload', formData, {
+                    'Content-type': 'multipart/form-data'
+                }).then(res => {
+                    console.log(res.data);
+                    uploadName = res.data.fileName;
+                    alert(res.data.msg)
+                }, err => {
+                    alert("网络连接失败,稍后重试", err);
+                })
+            }
+            else {
+                showDom.innerText = '选择文件'
+                showDom.style.background = '#c2e7b0'
+            }
+        }
         let changeArr = document.querySelectorAll('.conver');
 
         changeArr[0].onclick = () => {
@@ -346,6 +323,35 @@
         }
 
 
+        // 4.添加文字
+        function addWord() {
+            let addText = document.getElementById("write").value;
+            let pageText = document.getElementById("textFont").innerText;
+            let beforeLen = pageText.length;
+            pageText = pageText + addText;
+            let textArr = [...new Set(pageText.split(''))]
+            if (textArr.length === beforeLen) {
+                alert('这些字已经在页面上已存在了哦~~~')
+                return;
+            }
+            console.log('addtext')
+            axios({
+                method: 'post',
+                url: "./admin/write-word",
+                data: {
+                    addtext: textArr.join('')
+                }
+            }).then((res) => {
+                alert(res.data.msg)
+                getWord()
+            }).catch((err) => {
+                console.log('error', err)
+                alert("网络连接失败,稍后重试", err);
+            })
+        }
+        
+        /*
+        
         // 上传需要加载的文件
         function initFont() {
             let form = document.getElementById('uploadInitFont'),
@@ -387,13 +393,8 @@
             })
         }
 
-        document.querySelector(".defaultFont").onclick = () => {
-            let a = document.createElement('a');
-            a.download = 'heiti.ttf';
-            a.href = './init/heiti.ttf';
-            let event = new MouseEvent('click');
-            a.dispatchEvent(event);
-        }
+        */
+        
     </script>
 </body>
 
