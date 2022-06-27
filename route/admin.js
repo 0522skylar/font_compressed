@@ -3,6 +3,7 @@ const admin = express.Router();
 const path = require('path');
 const Fontmin = require('fontmin');
 const fs = require('fs');
+const cpu = require('child_process');
 const ttf2woff2 = require('ttf2woff2');
 const multer = require('multer') //导入multer中间件
 const removeFile = require('../util/removeFile')
@@ -115,7 +116,18 @@ admin.get('/ttf-to-woff', (req, res) => {
     // var input = fs.readFileSync('../public/upload' + fileName);
     var input = fs.readFileSync(path.join(__dirname, '../public/upload/'+ fileName));
     fileName = fileName.split('.')[0];
+    cpu.execFile('/bin/ls', ['-l', '.'],function(err,stdout){
+        fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
+            console.log('writing-------finish---------------', err)
+            res.send({
+                code: 200,
+                msg: '转换成功',
+                url: fileName + '.woff2'
+            })
+        });
+    });
     // ttf格式转换成woff2格式
+    /*
     fs.writeFile(path.join(__dirname, '../public/woff2/'+ fileName + '.woff2'), ttf2woff2(input), (err) => {
         console.log('writing-------finish---------------', err)
         res.send({
@@ -124,6 +136,7 @@ admin.get('/ttf-to-woff', (req, res) => {
             url: fileName + '.woff2'
         })
     });
+    */
 })
 
 //---------------------------------ttf-->woff-------------------
